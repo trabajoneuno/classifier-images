@@ -3,17 +3,28 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.models import load_model
+from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 import os
 import tempfile
 import logging
 from typing import Optional
 
+
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Image Classifier API")
+
+# Configuración de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://frontend-r3.onrender.com"],  # Permite solo este origen
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos (GET, POST, etc.)
+    allow_headers=["*"],  # Permite todos los encabezados
+)
 
 # Configuración
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
