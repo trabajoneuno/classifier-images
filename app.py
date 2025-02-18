@@ -1,9 +1,9 @@
+import os
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
-import os
 from typing import Optional
 
 app = FastAPI()
@@ -12,6 +12,7 @@ app = FastAPI()
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 MODEL_PATH = 'ecommerce_classifier.h5'
+PORT = int(os.environ.get("PORT", 8000))
 
 # Crear carpeta de uploads si no existe
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -76,3 +77,7 @@ async def predict(file: UploadFile = File(...)):
 @app.get("/")
 async def root():
     return {"message": "API de clasificación de imágenes"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
